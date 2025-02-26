@@ -1,5 +1,15 @@
-var builder = WebApplication.CreateBuilder(args);
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata;
+using MVCv1.Models;
+using MVCv1.Repositoria;
 
+var builder = WebApplication.CreateBuilder(args);
+// получаем строку подключени€ из файла конфигурации
+string connection = builder.Configuration.GetConnectionString("DefaultConnection");
+// добавл€ем контекст BlogContext в качестве сервиса в приложение
+builder.Services.AddDbContext<BlogContext>(options => options.UseSqlServer(connection));
+// регистраци€ сервиса репозитори€ дл€ взаимодействи€ с базой данных
+builder.Services.AddScoped<IBlogRepository, BlogRepository>();
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 
@@ -13,10 +23,14 @@ if (!app.Environment.IsDevelopment())
     app.UseHsts();
 }
 
+
 app.UseHttpsRedirection();
 app.UseStaticFiles();
 
 app.UseRouting();
+// 3.ƒобавл€ем компонент логировани€ через Middleware 
+
+app.UseMiddleware<LoggingMiddleware>();
 
 app.UseAuthorization();
 
