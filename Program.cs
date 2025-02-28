@@ -33,9 +33,13 @@ app.UseRouting();
 app.UseMiddleware<LoggingMiddleware>();
 
 app.UseAuthorization();
-
+/*
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
+*/
+app.MapControllerRoute(
+    name: "default",
+    pattern: "{controller=Users}/{action=Authors}/{id?}");
 
 app.Run();

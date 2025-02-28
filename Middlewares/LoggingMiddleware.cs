@@ -1,5 +1,7 @@
 ﻿
-    public class LoggingMiddleware
+using MVCv1.Controllers;
+
+public class LoggingMiddleware
     {
         private readonly RequestDelegate _next;
 
@@ -19,11 +21,11 @@
             // Для логирования данных о запросе используем свойста объекта HttpContext
             Console.WriteLine($"[{DateTime.Now}]: New request to http://{context.Request.Host.Value + context.Request.Path}");
 
-            string logMessage = $"[{DateTime.Now}]: New request to http://{context.Request.Host.Value + context.Request.Path}{Environment.NewLine}";
-
+            string logMessage = $"[{DateTime.Now}]: New request to http://{context.Request.Host.Value + context.Request.Path}{Environment.NewLine}  ";
+            
             // Путь до лога (опять-таки, используем абсолютный путь либо Directory.GetCurrentDirectory())
             string logFilePath = Path.Combine(Directory.GetCurrentDirectory(), "Logs", "RequestLog.txt");
-
+            
             // Используем асинхронную запись в файл
             await File.AppendAllTextAsync(logFilePath, logMessage);
 

@@ -1,5 +1,7 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using MVCv1.Models;
+using System.Net.Mime;
 
 namespace MVCv1.Repositoria
 {
@@ -24,6 +26,18 @@ namespace MVCv1.Repositoria
             // Сохранение изенений
             await _context.SaveChangesAsync();
         }
+
+        public async Task<User[]> GetUsers()
+        {
+            // Получим всех активных пользователей
+            return await _context.Users.ToArrayAsync();
+        }
+
+        
+        
+
+
+
 
     }
 }

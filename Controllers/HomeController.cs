@@ -18,6 +18,7 @@ namespace MVCv1.Controllers
 
         public async Task <IActionResult> Index()
         {
+            try { 
             // Добавим создание нового пользователя
             var newUser = new User()
             {
@@ -26,16 +27,37 @@ namespace MVCv1.Controllers
                 LastName = "Petrov",
                 JoinDate = DateTime.Now
             };
+            
+
+
 
             // Добавим в базу
             await _repo.AddUser(newUser);
 
             // Выведем результат
             Console.WriteLine($"User with id {newUser.Id}, named {newUser.FirstName} was successfully added on {newUser.JoinDate}");
-
+            }
+            catch (Exception ex) {
+                
+                Console.WriteLine(ex.ToString());
+            }
             return View();
 
         }
+
+        public async Task<IActionResult> Authors()
+        {
+            var authors = await _repo.GetUsers();
+
+            Console.WriteLine("See all blog authors:");
+            foreach (var author in authors)
+                Console.WriteLine($"Author name {author.FirstName}, joined {author.JoinDate}");
+
+            return View(authors);
+        }
+
+
+
 
         public IActionResult Privacy()
         {
