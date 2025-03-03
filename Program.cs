@@ -40,6 +40,6 @@ app.MapControllerRoute(
 */
 app.MapControllerRoute(
     name: "default",
-    pattern: "{controller=Users}/{action=Authors}/{id?}");
+    pattern: "{controller=Users}/{action=Register}/{id?}");
 
 app.Run();

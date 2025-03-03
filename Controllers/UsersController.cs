@@ -17,6 +17,7 @@ namespace MVCv1.Controllers
             _logger = logger;
             _repo = repo;
         }
+        /*
         public async Task<IActionResult> Index()
         {
             try
@@ -47,34 +48,52 @@ namespace MVCv1.Controllers
             return View();
 
         }
+        */
 
 
 
         public async Task<IActionResult> Authors()
         {
-            try {
+            try
+            {
                 var authors = await _repo.GetUsers();
                 return View(authors);
             }
             catch (Exception ex)
-            { Console.WriteLine(ex.ToString()); 
-            
-            
+            {
+                Console.WriteLine(ex.ToString());
+
+
             }
             return View();
 
 
         }
+        [HttpGet]
         public async Task<IActionResult> Register()
         {
             
-
-
             return View();
+        }
+        [HttpPost]
+        public async Task<IActionResult> Register(User user)
+        {
+            user = new User()
+            {
+                Id = Guid.NewGuid(),
+                FirstName = $"{user.FirstName}",
+                LastName = $"{user.LastName}",
+                JoinDate = DateTime.Now,
+            };
+            
+           await _repo.AddUser(user);
+            return View(user);
+         // return Content($"Registration successful, {user.FirstName}");
+
+
         }
 
 
-     
 
 
 
