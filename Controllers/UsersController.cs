@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using MVCv1.Models;
 using MVCv1.Repositoria;
 using System.Diagnostics;
@@ -11,11 +12,14 @@ namespace MVCv1.Controllers
     {
         private readonly ILogger<UsersController> _logger;
         private readonly IBlogRepository _repo;
+        private readonly ILog _log;
 
-        public UsersController(ILogger<UsersController> logger, IBlogRepository repo)
+        public UsersController(ILogger<UsersController> logger, IBlogRepository repo, ILog log)
         {
             _logger = logger;
+            _log = log;
             _repo = repo;
+           
         }
         /*
         public async Task<IActionResult> Index()
@@ -54,9 +58,24 @@ namespace MVCv1.Controllers
 
         public async Task<IActionResult> Authors()
         {
+
             try
             {
+                var valueUrl = HttpContext.Items["url"] as string;
+                if (HttpContext.Items.TryGetValue("CurrentDateTime", out var dateTimeObject))
+                {
+                    DateTime valueDate = (DateTime)dateTimeObject;
+                    // Добавим создание нового лога
+                    var newReques = new Request()
+                    {
+                        Id = Guid.NewGuid(),
+                        Date = valueDate,
+                        Url = valueUrl
+                    };
+                    await _log.Log(newReques);
+                }
                 var authors = await _repo.GetUsers();
+
                 return View(authors);
             }
             catch (Exception ex)
@@ -72,7 +91,20 @@ namespace MVCv1.Controllers
         [HttpGet]
         public async Task<IActionResult> Register()
         {
-            
+            var valueUrl = HttpContext.Items["url"] as string;
+            if (HttpContext.Items.TryGetValue("CurrentDateTime", out var dateTimeObject))
+            {
+                DateTime valueDate = (DateTime)dateTimeObject;
+                // Добавим создание нового лога
+                var newReques = new Request()
+                {
+                    Id = Guid.NewGuid(),
+                    Date = valueDate,
+                    Url = valueUrl
+                };
+                await _log.Log(newReques);
+            }
+
             return View();
         }
         [HttpPost]
@@ -93,7 +125,7 @@ namespace MVCv1.Controllers
 
         }
 
-
+       
 
 
 

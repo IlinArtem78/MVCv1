@@ -10,7 +10,9 @@ string connection = builder.Configuration.GetConnectionString("DefaultConnection
 builder.Services.AddDbContext<BlogContext>(options => options.UseSqlServer(connection));
 // регистрация сервиса репозитория для взаимодействия с базой данных
 builder.Services.AddScoped<IBlogRepository, BlogRepository>();
+builder.Services.AddScoped<ILog, LogRepositoria>();
 // Add services to the container.
+ 
 builder.Services.AddControllersWithViews();
 
 var app = builder.Build();
